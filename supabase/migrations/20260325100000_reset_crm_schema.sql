@@ -1,7 +1,20 @@
 drop trigger if exists on_auth_user_created on auth.users;
 
-drop trigger if exists trg_lowercase_email_contacts on public.contacts;
-drop trigger if exists trg_lowercase_email_invitations on public.invitations;
+do $$
+begin
+  if to_regclass('public.contacts') is not null then
+    drop trigger if exists trg_lowercase_email_contacts on public.contacts;
+  end if;
+end;
+$$;
+
+do $$
+begin
+  if to_regclass('public.invitations') is not null then
+    drop trigger if exists trg_lowercase_email_invitations on public.invitations;
+  end if;
+end;
+$$;
 
 drop function if exists public.handle_new_user();
 drop function if exists public.current_user_role() cascade;
