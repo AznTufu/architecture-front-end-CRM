@@ -110,14 +110,14 @@ vi.mock('../entities/activity', async () => {
 
 vi.mock('../features/create-contact/model/useCreateContactMutation', () => ({
   useCreateContactMutation: () => ({
-    mutateAsync: async (values: {
+    mutate: (values: {
       firstName: string;
       lastName: string;
       email: string;
       phone: string;
       companyId: string;
       status: ContactRow['status'];
-    }) => {
+    }, options?: { onSuccess?: () => void }) => {
       const companyName = companies.find((company) => company.id === values.companyId)?.name ?? '';
       contacts = [
         {
@@ -132,6 +132,7 @@ vi.mock('../features/create-contact/model/useCreateContactMutation', () => ({
         },
         ...contacts,
       ];
+      options?.onSuccess?.();
     },
     isPending: false,
     isError: false,
@@ -141,12 +142,12 @@ vi.mock('../features/create-contact/model/useCreateContactMutation', () => ({
 
 vi.mock('../features/create-deal/model/useCreateDealMutation', () => ({
   useCreateDealMutation: () => ({
-    mutateAsync: async (values: {
+    mutate: (values: {
       title: string;
       amount: number;
       stage: DealRow['stage'];
       contactId: string;
-    }) => {
+    }, options?: { onSuccess?: () => void }) => {
       const contact = contacts.find((entry) => entry.id === values.contactId);
       const createdDeal: DealRow = {
         id: '44444444-4444-4444-8444-444444444444',
@@ -173,6 +174,7 @@ vi.mock('../features/create-deal/model/useCreateDealMutation', () => ({
         },
         ...activities,
       ];
+      options?.onSuccess?.();
     },
     isPending: false,
     isError: false,

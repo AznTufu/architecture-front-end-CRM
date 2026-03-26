@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { CreateContactForm } from '../features/create-contact';
 
-const mutateAsync = vi.fn().mockResolvedValue(undefined);
+const mutate = vi.fn();
 const companies = [
   { id: '11111111-1111-4111-8111-111111111111', name: 'Acme Paris' },
   { id: '22222222-2222-4222-8222-222222222222', name: 'Nordic Flow' },
@@ -11,7 +11,7 @@ const companies = [
 
 vi.mock('../features/create-contact/model/useCreateContactMutation', () => ({
   useCreateContactMutation: () => ({
-    mutateAsync,
+    mutate,
     isPending: false,
     isError: false,
     error: null,
@@ -29,6 +29,7 @@ vi.mock('../entities/company', () => ({
 
 describe('CreateContactForm', () => {
   it('affiche des erreurs de validation si le formulaire est invalide', async () => {
+    mutate.mockReset();
     const user = userEvent.setup();
     render(<CreateContactForm />);
 
@@ -39,6 +40,7 @@ describe('CreateContactForm', () => {
   });
 
   it('soumet le formulaire quand les donnees sont valides', async () => {
+    mutate.mockReset();
     const user = userEvent.setup();
     render(<CreateContactForm />);
 
@@ -49,13 +51,18 @@ describe('CreateContactForm', () => {
     await user.selectOptions(screen.getByLabelText('Entreprise'), companies[1].id);
     await user.click(screen.getByRole('button', { name: 'Créer le contact' }));
 
-    expect(mutateAsync).toHaveBeenCalledWith({
-      firstName: 'Laura',
-      lastName: 'Martin',
-      email: 'laura@horizon.com',
-      phone: '+33612345678',
-      companyId: companies[1].id,
-      status: 'lead',
-    });
+    expect(mutate).toHaveBeenCalledWith(
+      {
+        firstName: 'Laura',
+        lastName: 'Martin',
+        email: 'laura@horizon.com',
+        phone: '+33612345678',
+        companyId: companies[1].id,
+        status: 'lead',
+      },
+      expect.objectContaining({
+        onSuccess: expect.any(Function),
+      })
+    );
   });
 });
