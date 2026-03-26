@@ -160,13 +160,19 @@ SUPABASE_SERVICE_ROLE_KEY=...
 
 These values are required to run the frontend against your Supabase project.
 
+Where to find `SUPABASE_SERVICE_ROLE_KEY`:
+
+- Open your Supabase project dashboard.
+- Go to `Project Settings` -> `API`.
+- In the `Project API keys` section, copy the `service_role` key.
+
+Important:
+
+- `SUPABASE_SERVICE_ROLE_KEY` is a secret key with elevated permissions.
+- Keep it only local private env files.
+
 ### 4. Run database migrations
-
-```bash
-supabase db push
-```
-
-If your workflow requires linking a remote project first:
+Your workflow requires linking a remote project first:
 
 ```bash
 supabase login
