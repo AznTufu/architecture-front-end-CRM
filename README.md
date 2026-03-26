@@ -4,7 +4,7 @@ Pulse CRM is a SaaS-style CRM frontend built with React, TypeScript, and Feature
 
 ## Production Application
 
-- Production URL: https://architecture-front-end-crm-m4nw.vercel.app/
+- Production URL: https://architecture-front-end-crm.vercel.app
 
 ## Admin Test Credentials
 
