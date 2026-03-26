@@ -4,7 +4,14 @@ Pulse CRM is a SaaS-style CRM frontend built with React, TypeScript, and Feature
 
 ## Production Application
 
-- Production URL: 
+- Production URL: https://architecture-front-end-crm-m4nw.vercel.app/
+
+## Admin Test Credentials
+
+Use these credentials to test the admin account in the deployed app:
+
+- Email: admin@admin.fr
+- Password: admin123
 
 ## Technical Stack and Rationale
 
