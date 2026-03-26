@@ -44,29 +44,27 @@ export function AuthByPasswordForm() {
   const isPending = loginMutation.isPending || registerMutation.isPending;
   const apiError = loginMutation.error?.message ?? registerMutation.error?.message;
 
-  const submitLogin = loginForm.handleSubmit(async (values) => {
+  const submitLogin = loginForm.handleSubmit((values) => {
     setSuccessMessage(null);
-    try {
-      await loginMutation.mutateAsync(values);
-      navigate('/', { replace: true });
-    } catch (error) {
-      console.error('login submit failed', error);
-    }
+    loginMutation.mutate(values, {
+      onSuccess: () => {
+        navigate('/', { replace: true });
+      },
+    });
   });
 
-  const submitSignUp = signUpForm.handleSubmit(async (values) => {
+  const submitSignUp = signUpForm.handleSubmit((values) => {
     setSuccessMessage(null);
-    try {
-      await registerMutation.mutateAsync(values);
-      setSuccessMessage(
-        'Compte cree. Verifie ton email puis connecte-toi. Si tu as ete invite, ton role sera assigne automatiquement.'
-      );
-      setMode('login');
-      loginForm.setValue('email', values.email);
-      signUpForm.reset(signUpDefaults);
-    } catch (error) {
-      console.error('signup submit failed', error);
-    }
+    registerMutation.mutate(values, {
+      onSuccess: () => {
+        setSuccessMessage(
+          'Compte cree. Verifie ton email puis connecte-toi. Si tu as ete invite, ton role sera assigne automatiquement.'
+        );
+        setMode('login');
+        loginForm.setValue('email', values.email);
+        signUpForm.reset(signUpDefaults);
+      },
+    });
   });
 
   return (

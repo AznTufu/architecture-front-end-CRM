@@ -35,24 +35,17 @@ export async function updateDealStage(payload: {
   dealId: string;
   stage: DealStage;
 }): Promise<void> {
-  try {
-    const { data, error } = await supabaseClient.rpc('update_deal_stage', {
-      p_deal_id: payload.dealId,
-      p_stage: payload.stage,
-    });
+  const { data, error } = await supabaseClient.rpc('update_deal_stage', {
+    p_deal_id: payload.dealId,
+    p_stage: payload.stage,
+  });
 
-    if (error) {
-      throw new Error(error.message);
-    }
+  if (error) {
+    throw new Error(error.message);
+  }
 
-    if ((data ?? 0) === 0) {
-      throw new Error('Aucun deal mis a jour. Verifie les droits ou la propriete du deal.');
-    }
-  } catch (error) {
-    if (error instanceof TypeError) {
-      throw new Error('Erreur reseau lors du deplacement. Verifie la connexion puis reessaie.');
-    }
-    throw error;
+  if ((data ?? 0) === 0) {
+    throw new Error('Aucun deal mis a jour. Verifie les droits ou la propriete du deal.');
   }
 }
 

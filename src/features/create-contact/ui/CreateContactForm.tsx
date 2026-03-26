@@ -38,16 +38,15 @@ export function CreateContactForm() {
     }
   }, [companiesQuery.data, setValue]);
 
-  const onSubmit = handleSubmit(async (values) => {
-    try {
-      await mutation.mutateAsync(values);
-      reset({
-        ...defaultValues,
-        companyId: companiesQuery.data?.[0]?.id ?? defaultValues.companyId,
-      });
-    } catch (error) {
-      console.error('create-contact submit failed', error);
-    }
+  const onSubmit = handleSubmit((values) => {
+    mutation.mutate(values, {
+      onSuccess: () => {
+        reset({
+          ...defaultValues,
+          companyId: companiesQuery.data?.[0]?.id ?? defaultValues.companyId,
+        });
+      },
+    });
   });
 
   if (companiesQuery.isPending) {

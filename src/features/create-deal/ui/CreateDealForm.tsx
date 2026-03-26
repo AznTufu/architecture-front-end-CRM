@@ -37,16 +37,15 @@ export function CreateDealForm() {
     }
   }, [contactsQuery.data, setValue]);
 
-  const onSubmit = handleSubmit(async (values) => {
-    try {
-      await mutation.mutateAsync(values);
-      reset({
-        ...defaultValues,
-        contactId: contactsQuery.data?.[0]?.id ?? defaultValues.contactId,
-      });
-    } catch (error) {
-      console.error('create-deal submit failed', error);
-    }
+  const onSubmit = handleSubmit((values) => {
+    mutation.mutate(values, {
+      onSuccess: () => {
+        reset({
+          ...defaultValues,
+          contactId: contactsQuery.data?.[0]?.id ?? defaultValues.contactId,
+        });
+      },
+    });
   });
 
   if (contactsQuery.isPending) {

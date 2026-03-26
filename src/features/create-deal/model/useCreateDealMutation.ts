@@ -9,17 +9,15 @@ export function useCreateDealMutation() {
   return useMutation({
     mutationFn: createDealFromForm,
     onSuccess: async (createdDeal, variables) => {
-      try {
-        await createActivity({
-          type: 'note',
-          title: `Deal cree: ${createdDeal.title}`,
-          description: `Montant ${new Intl.NumberFormat('fr-FR').format(createdDeal.amount)} € · Etape ${createdDeal.stage}`,
-          contact_id: variables.contactId,
-          deal_id: createdDeal.id,
-        });
-      } catch (error) {
+      await createActivity({
+        type: 'note',
+        title: `Deal cree: ${createdDeal.title}`,
+        description: `Montant ${new Intl.NumberFormat('fr-FR').format(createdDeal.amount)} € · Etape ${createdDeal.stage}`,
+        contact_id: variables.contactId,
+        deal_id: createdDeal.id,
+      }).catch((error: unknown) => {
         console.warn('create activity after deal creation failed', error);
-      }
+      });
 
       await queryClient.invalidateQueries({ queryKey: queryKeys.deals.all });
       await queryClient.invalidateQueries({ queryKey: queryKeys.activities.all });
