@@ -44,7 +44,8 @@ export function CreateDealForm() {
         ...defaultValues,
         contactId: contactsQuery.data?.[0]?.id ?? defaultValues.contactId,
       });
-    } catch {
+    } catch (error) {
+      console.error('create-deal submit failed', error);
     }
   });
 

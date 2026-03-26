@@ -27,7 +27,8 @@ export function CreateCompanyForm() {
     try {
       await mutation.mutateAsync(values);
       reset(defaultValues);
-    } catch {
+    } catch (error) {
+      console.error('create-company submit failed', error);
     }
   });
 

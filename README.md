@@ -43,6 +43,37 @@ Why Supabase:
 - Good fit for a frontend-focused architecture assignment.
 - SQL migrations keep schema evolution explicit and reproducible.
 
+## User Scoping (RLS + Policies)
+
+User scoping is enforced at the database level with Supabase Row Level Security.
+
+Primary migration reference:
+
+- `supabase/migrations/20260325100000_reset_crm_schema.sql`
+
+What is enforced:
+
+- RLS is enabled on `profiles`, `companies`, `contacts`, `deals`, `activities`, `invitations`.
+- `companies_manage`: user can access rows where `auth.uid() = user_id`, or is `superadmin`.
+- `contacts_manage`: user can access rows where `auth.uid() = user_id`, or is `superadmin`.
+- `deals_manage`: user can access rows where `auth.uid() = user_id`, or is `superadmin`.
+- `activities_manage`: user can access rows where `auth.uid() = user_id`, or is `superadmin`.
+- `profiles_select` / `profiles_update`: user can read/update own profile (`auth.uid() = id`), or `superadmin`.
+- `invitations_superadmin_manage`: only `superadmin` can manage invitations.
+
+Role resolution used by policies:
+
+- `public.current_user_role()` returns role from `public.profiles` for current authenticated user.
+
+Additional RPC scoping for deal write actions:
+
+- `supabase/migrations/20260325113000_add_update_deal_stage_rpc.sql`
+- `supabase/migrations/20260325123000_add_update_delete_deal_rpc.sql`
+
+These RPC functions (`update_deal_stage`, `update_deal`, `delete_deal`) include ownership checks:
+
+- action allowed only when `user_id = auth.uid()` or user role is `superadmin`.
+
 ### FSD Slicing Strategy
 
 - `app`: application bootstrap, providers, router, auth guards.

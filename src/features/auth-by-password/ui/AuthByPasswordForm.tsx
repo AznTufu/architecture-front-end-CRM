@@ -49,7 +49,8 @@ export function AuthByPasswordForm() {
     try {
       await loginMutation.mutateAsync(values);
       navigate('/', { replace: true });
-    } catch {
+    } catch (error) {
+      console.error('login submit failed', error);
     }
   });
 
@@ -63,7 +64,8 @@ export function AuthByPasswordForm() {
       setMode('login');
       loginForm.setValue('email', values.email);
       signUpForm.reset(signUpDefaults);
-    } catch {
+    } catch (error) {
+      console.error('signup submit failed', error);
     }
   });
 

@@ -17,7 +17,8 @@ export function useCreateDealMutation() {
           contact_id: variables.contactId,
           deal_id: createdDeal.id,
         });
-      } catch {
+      } catch (error) {
+        console.warn('create activity after deal creation failed', error);
       }
 
       await queryClient.invalidateQueries({ queryKey: queryKeys.deals.all });

@@ -45,7 +45,8 @@ export function CreateContactForm() {
         ...defaultValues,
         companyId: companiesQuery.data?.[0]?.id ?? defaultValues.companyId,
       });
-    } catch {
+    } catch (error) {
+      console.error('create-contact submit failed', error);
     }
   });
 
